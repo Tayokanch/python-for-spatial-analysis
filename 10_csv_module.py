@@ -44,16 +44,32 @@ def my_city_coordinate():
                 resident_city_coordinate = (lat, log)
         print(resident_city_coordinate)
 
-def compute_distance_from_my_city():
-    with open(file_path, encoding='utf-8-sig') as file :
-        csv_reader = csv.DictReader(file)
-        for row in csv_reader:
-            if(resident_country.upper() == row['country'].upper() and
-                resident_city.upper() != row['city'].upper()):
-                city_coordinate = (row['lat'], row['lng'])
-                city_distance = distance.geodesic(city_coordinate,resident_city_coordinate).km
-                print(row['city_ascii'], city_distance)
+## write the cities distance to a CSV file
+def write_distance_to_home_city():
+    output_filename = 'cities_distance.csv'
+    output_path = os.path.join(dir, output_filename)
+    fieldnames = ['city', 'distance_from_home']
+
+    with open(output_path, 'w', newline='', encoding='utf-8-sig') as out_file :
+        csv_writer = csv.DictWriter(out_file, fieldnames=fieldnames)
+        csv_writer.writeheader();
+
+        with open(file_path, encoding='utf-8-sig') as file :
+            csv_reader = csv.DictReader(file)
+            for row in csv_reader:
+                if(resident_country.upper() == row['country'].upper() and
+                    resident_city.upper() != row['city'].upper()):
+                    city_coordinate = (row['lat'], row['lng'])
+                    city_distance = distance.geodesic(city_coordinate,resident_city_coordinate).km
+                    csv_writer.writerow(
+                        {'city': row['city_ascii'],
+                        'distance_from_home': city_distance
+                        }
+                
+        )
+
+
 
 number_of_cities_in_country()
 my_city_coordinate()
-compute_distance_from_my_city()
+write_distance_to_home_city()
