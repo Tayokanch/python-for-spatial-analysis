@@ -52,7 +52,7 @@ def write_distance_to_home_city():
 
     with open(output_path, 'w', newline='', encoding='utf-8-sig') as out_file :
         csv_writer = csv.DictWriter(out_file, fieldnames=fieldnames)
-        csv_writer.writeheader();
+        csv_writer.writeheader(); ## Write the fieldnames
 
         with open(file_path, encoding='utf-8-sig') as file :
             csv_reader = csv.DictReader(file)
